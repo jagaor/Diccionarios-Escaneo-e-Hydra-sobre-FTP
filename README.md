@@ -65,3 +65,41 @@ A continuación, se listan los comandos clave ejecutados en la máquina víctima
 | `sudo ufw delete allow 21/tcp` | **Cierra el puerto 21** para evitar vulnerabilidades permanentes. |
 | `sudo userdel -r ftpuser` | **Elimina el usuario de pruebas** para limpieza. |
 | `sudo systemctl disable vsftpd` | **Deshabilita el servicio vsftpd** para evitar vulnerabilidades. |
+
+## 🐍 Script de Optimización
+
+El archivo `ordenar_entropia.py` se utiliza para ordenar el diccionario de contraseñas, priorizando aquellas con mayor entropía para optimizar la eficiencia del ataque de fuerza bruta:
+
+```python
+import math, sys
+import collections
+
+# Función para calcular la entropía (complejidad) de una contraseña
+def entropy(s):
+    if not s:
+        return 0
+    # Cuenta la frecuencia de cada carácter en la cadena
+    counter = collections.Counter(s)
+    length = len(s)
+    
+    # Calcula la entropía de Shannon (en bits)
+    return -sum((count/length) * math.log2(count/length) for count in counter.values()) # cite: 76, 77, 79, 80, 81
+
+# Función principal para procesar los archivos
+def main(infile, outfile):
+    # Lee el archivo de entrada
+    with open(infile, errors='ignore') as f: # cite: 83
+        # Crea una lista de contraseñas únicas y sin espacios
+        pw = [p.strip() for p in f if p.strip()] # cite: 84
+    
+    # Ordena la lista de contraseñas por entropía (de mayor a menor)
+    sorted_pw = sorted(set(pw), key=lambda x: entropy(x), reverse=True) # cite: 85
+    
+    # Escribe las contraseñas ordenadas en el archivo de salida
+    with open(outfile, 'w') as f: # cite: 86
+        f.write('\n'.join(sorted_pw)) # cite: 87
+
+# Punto de entrada del script
+if __name__ == "__main__": # cite: 88, 89
+    # Requiere el nombre del archivo de entrada y el de salida como argumentos
+    main(sys.argv[1], sys.argv[2]) # cite: 90
