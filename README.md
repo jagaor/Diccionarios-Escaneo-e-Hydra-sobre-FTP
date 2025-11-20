@@ -1,4 +1,4 @@
-# RA1-5.AEE - Diccionarios, Escaneo e Hydra sobre FTP
+# Diccionarios, Escaneo e Hydra sobre FTP
 
 ## 📋 Descripción
 
